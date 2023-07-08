@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://lucaspichollet:Nq8BtFZbRWyG57U8@lucasp-cluster0.mscptrr.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://lucaspichollet:Nq8BtFZbRWyG57U8@lucasp-cluster0.mscptrr.mongodb.net/monVieuxGrimoire',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -30,11 +30,23 @@ app.post('/api/auth/signup', (req, res) => {
         .catch(error => res.status(400).json({ error }));
 });
 
-/*
+
 app.post('/api/auth/login', (req, res) => {
-    res.status(200).json({ userId: string, token: string });
+    const { email, password } = req.body;
+    User.findOne({ email })
+        .then(user => {
+            if (!user) {
+                return res.status(401).json({ message: 'Adresse e-mail ou mot de passe incorrect !' });
+            }
+            if (password !== user.password) {
+                return res.status(401).json({ message: 'Adresse e-mail ou mot de passe incorrect !' });
+            }       
+            res.status(200).json({userId: user.userId, token: jwt.sign({ userId: user.userId }, 'myToken')})
+        })
+        .catch(error => res.status(500).json({ error }));
 });
 
+/*
 app.get('/api/books', (req, res) => {
     const books = [
 
