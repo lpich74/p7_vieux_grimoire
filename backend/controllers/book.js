@@ -70,6 +70,15 @@ exports.deleteBook = (req, res) => {
 
 exports.createRating = (req, res) => {
     const { userId, rating } = req.body;
+    if (typeof userId === 'undefined' || typeof rating === 'undefined' || typeof rating !== 'number') {
+        return res.sendStatus(400);
+    }
+    if (rating < 0 || rating > 5) {
+        return res.sendStatus(400);
+    }
+    if (userId !== req.auth.userId) {
+        res.status(403).json({ message: 'Unauthorized request' });
+    }
     Book.findOne({ _id: req.params.id })
         .then(book => {
             // vérifie si on trouve le livre
