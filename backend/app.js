@@ -8,9 +8,11 @@ const userRoutes = require('./routes/user');
 const bookRoutes = require('./routes/book');
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://lucaspichollet:Nq8BtFZbRWyG57U8@lucasp-cluster0.mscptrr.mongodb.net/monVieuxGrimoire',
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
+require('dotenv').config();
+mongoose
+  .connect(process.env.MONGODB_CONNECTION_STRING,
+    { useNewUrlParser: true,
+      useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
